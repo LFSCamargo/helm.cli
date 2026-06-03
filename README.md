@@ -102,7 +102,7 @@ pnpm test:coverage    # same tests with 80% coverage on core/config/theme
 ```
 
 CI runs `format:check`, `lint:check`, `types:check`, `unitary:test`, `integration:test`,
-and `test:coverage` on every pull request. See [`docs/quality-gates.md`](./docs/quality-gates.md).
+`e2e:test`, and `test:coverage` on every pull request. See [`docs/quality-gates.md`](./docs/quality-gates.md).
 
 ## Project structure
 

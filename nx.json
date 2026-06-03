@@ -41,6 +41,10 @@
       "inputs": ["default", "^production"],
       "cache": false
     },
+    "e2e:test": {
+      "inputs": ["default", "^production"],
+      "cache": false
+    },
     "test:coverage": {
       "inputs": ["default", "^production"],
       "cache": false

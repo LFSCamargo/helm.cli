@@ -42,5 +42,8 @@ jobs:
       - name: integration:test
         run: pnpm integration:test
 
+      - name: e2e:test
+        run: pnpm e2e:test
+
       - name: test:coverage
         run: pnpm test:coverage

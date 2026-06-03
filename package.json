@@ -29,8 +29,9 @@
     "test:integration": "vitest run --project integration",
     "unitary:test": "vitest run --project unit",
     "integration:test": "vitest run --project integration",
+    "e2e:test": "vitest run --project e2e",
     "test:coverage": "vitest run --coverage --project unit --project integration",
-    "quality": "pnpm format:check && pnpm lint:check && pnpm types:check && pnpm unitary:test && pnpm integration:test && pnpm test:coverage"
+    "quality": "pnpm format:check && pnpm lint:check && pnpm types:check && pnpm unitary:test && pnpm integration:test && pnpm e2e:test && pnpm test:coverage"
   },
   "keywords": [
     "cli",
@@ -134,6 +135,13 @@
         "executor": "nx:run-script",
         "options": {
           "script": "integration:test"
+        },
+        "cache": true
+      },
+      "e2e:test": {
+        "executor": "nx:run-script",
+        "options": {
+          "script": "e2e:test"
         },
         "cache": true
       },

@@ -12,12 +12,14 @@ Before finishing any implementation in this repo, you **must** satisfy all of th
 - Place tests in `__tests__/` next to the code under test.
 - **Unit tests:** `*.unit.test.ts` — pure logic, no live DB/network.
 - **Integration tests:** `*.integration.test.ts` — SQLite, filesystem, or multi-module flows.
+- **E2E tests:** `*.e2e.test.tsx` — full `<App />` flows with `ink-testing-library`.
 - When you **add, change, or remove** behavior, **add, update, or remove** the matching tests in the same change.
 - Coverage threshold is **80%** on gated paths (`src/core`, `src/config`, `src/theme`). Run `pnpm test:coverage` locally.
 
 ```bash
-pnpm test:unit
-pnpm test:integration
+pnpm unitary:test
+pnpm integration:test
+pnpm e2e:test
 ```
 
 ## 2. Documentation

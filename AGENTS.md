@@ -35,6 +35,7 @@ Every change must pass **format**, **lint**, **types**, and **tests** before mer
 | Types | `pnpm types:check` |
 | Unit tests | `pnpm unitary:test` (`*.unit.test.ts` in `__tests__/`) |
 | Integration tests | `pnpm integration:test` (`*.integration.test.ts`) |
+| E2E (Ink UI) | `pnpm e2e:test` (`*.e2e.test.tsx`) |
 | Coverage (80%) | `pnpm test:coverage` |
 
 When you change implementation, **update tests and `/docs` in the same PR**. See `docs/quality-gates.md` and `.cursor/rules/quality-gates.mdc`.

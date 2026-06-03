@@ -9,6 +9,7 @@ Every PR and agent change must pass:
 | Types | `pnpm types:check` | `nx types:check helm-cli` |
 | Unit tests | `pnpm unitary:test` | `nx unitary:test helm-cli` |
 | Integration tests | `pnpm integration:test` | `nx integration:test helm-cli` |
+| E2E (Ink UI) | `pnpm e2e:test` | `nx e2e:test helm-cli` |
 
 Local all-in-one:
 

@@ -49,6 +49,16 @@ export default defineConfig({
           setupFiles: ['src/test/setup.ts', 'src/test/setup.integration.ts'],
         },
       },
+      {
+        extends: true,
+        test: {
+          ...shared,
+          name: 'e2e',
+          include: ['src/**/*.e2e.test.tsx'],
+          setupFiles: ['src/test/setup.ts', 'src/test/setup.integration.ts'],
+          testTimeout: 10_000,
+        },
+      },
     ],
   },
 });

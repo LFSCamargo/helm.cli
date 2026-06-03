@@ -41,6 +41,11 @@
       "options": { "script": "integration:test" },
       "cache": true
     },
+    "e2e:test": {
+      "executor": "nx:run-script",
+      "options": { "script": "e2e:test" },
+      "cache": true
+    },
     "test:coverage": {
       "executor": "nx:run-script",
       "options": { "script": "test:coverage" },
