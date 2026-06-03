@@ -49,5 +49,6 @@
       "inputs": ["default", "^production"],
       "cache": false
     }
-  }
+  },
+  "analytics": true
 }
