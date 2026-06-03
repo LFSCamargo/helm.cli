@@ -4,7 +4,7 @@ import TextInput from 'ink-text-input';
 import { Layout } from '../../components/Layout.js';
 import { useRouter } from '../../navigation/RouterContext.js';
 import { createPrompt, slugify } from '../../core/prompts/prompt.service.js';
-import { colors, gradients } from '../../theme/theme.js';
+import { colors, gradients, symbols } from '../../theme/theme.js';
 
 export function PromptCreateScreen({ project }: { project: string }) {
   const router = useRouter();
@@ -34,7 +34,7 @@ export function PromptCreateScreen({ project }: { project: string }) {
       <Box flexDirection="column">
         <Text color={colors.muted}>Prompt title</Text>
         <Box>
-          <Text color={colors.accent}>{'> '}</Text>
+          <Text color={colors.accent} bold>{`${symbols.pointer} `}</Text>
           <TextInput
             value={title}
             onChange={setTitle}

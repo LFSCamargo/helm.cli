@@ -4,6 +4,8 @@ export interface PromptProject {
   /** How many .md prompts live inside the project. */
   count: number;
   updatedAt: Date;
+  /** From helm.meta.json or a generated summary for the project list. */
+  description: string;
 }
 
 export interface PromptMeta {

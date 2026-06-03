@@ -1,51 +1,72 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Box, Text, useApp, useInput } from 'ink';
 import { Logo } from '../components/Logo.js';
 import { SelectList } from '../components/SelectList.js';
 import { StatusBar } from '../components/StatusBar.js';
+import { AnimatedGradient } from '../components/AnimatedGradient.js';
 import { useRouter } from '../navigation/RouterContext.js';
-import { listProjects } from '../core/prompts/prompt.service.js';
+import { listRecentPrompts } from '../core/prompts/prompt.service.js';
 import { listTodos } from '../core/todos/todo.service.js';
-import { colors, gradients, symbols } from '../theme/theme.js';
+import type { PromptMeta } from '../core/prompts/prompt.types.js';
+import { colors, flow, symbols } from '../theme/theme.js';
+import { MenuText } from '../components/MenuText.js';
 import { isOverdue, isToday } from '../core/util/datetime.js';
-import Gradient from 'ink-gradient';
 
 interface MenuEntry {
   id: string;
-  icon: string;
   label: string;
   hint: string;
   accent: readonly string[];
   go: () => void;
 }
 
-interface Stats {
-  projects: number;
-  prompts: number;
-  openTodos: number;
+interface TaskStats {
+  open: number;
   today: number;
   overdue: number;
+}
+
+function StatTile({
+  value,
+  label,
+  color,
+}: {
+  value: number;
+  label: string;
+  color: string;
+}) {
+  return (
+    <Box
+      flexDirection="column"
+      borderStyle="round"
+      borderColor={colors.border}
+      paddingX={2}
+      marginRight={1}
+      alignItems="center"
+    >
+      <Text bold color={color}>
+        {value}
+      </Text>
+      <Text color={colors.dim}>{label}</Text>
+    </Box>
+  );
 }
 
 export function HomeScreen() {
   const router = useRouter();
   const { exit } = useApp();
-  const [stats, setStats] = useState<Stats>({
-    projects: 0,
-    prompts: 0,
-    openTodos: 0,
-    today: 0,
-    overdue: 0,
-  });
+  const [stats, setStats] = useState<TaskStats>({ open: 0, today: 0, overdue: 0 });
+  const [recentPrompts, setRecentPrompts] = useState<PromptMeta[]>([]);
+  const [focus, setFocus] = useState<'recent' | 'main'>('main');
 
   useEffect(() => {
-    const projects = listProjects();
+    const recent = listRecentPrompts(5);
+    setRecentPrompts(recent);
+    if (recent.length > 0) setFocus('recent');
     void listTodos().then((todos) => {
       const open = todos.filter((t) => !t.completed);
       setStats({
-        projects: projects.length,
-        prompts: projects.reduce((sum, p) => sum + p.count, 0),
-        openTodos: open.length,
+        open: open.length,
         today: open.filter((t) => t.dueAt && isToday(t.dueAt)).length,
         overdue: open.filter((t) => t.dueAt && isOverdue(t.dueAt)).length,
       });
@@ -55,32 +76,35 @@ export function HomeScreen() {
   const entries: MenuEntry[] = [
     {
       id: 'prompts',
-      icon: '◈',
       label: 'Prompts',
-      hint: `${stats.prompts} prompts · ${stats.projects} projects`,
-      accent: gradients.ocean,
+      hint: 'browse your prompt library',
+      accent: flow.ocean,
       go: () => router.navigate({ name: 'prompt-projects' }),
     },
     {
       id: 'todos',
-      icon: '✦',
       label: 'Todos',
-      hint: `${stats.openTodos} open · ${stats.today} today · ${stats.overdue} overdue`,
-      accent: gradients.flame,
+      hint: `${stats.open} open · ${stats.today} today · ${stats.overdue} overdue`,
+      accent: flow.flame,
       go: () => router.navigate({ name: 'todos' }),
     },
     {
       id: 'quit',
-      icon: '⏻',
       label: 'Quit',
       hint: 'exit helm',
-      accent: ['#6b7280', '#9ca3af'],
+      accent: ['#6b7280', '#9ca3af', '#6b7280'],
       go: () => exit(),
     },
   ];
 
-  useInput((input) => {
+  const toggleFocus = useCallback(() => {
+    if (recentPrompts.length === 0) return;
+    setFocus((f) => (f === 'recent' ? 'main' : 'recent'));
+  }, [recentPrompts.length]);
+
+  useInput((input, key) => {
     if (input === 'q') exit();
+    else if (key.tab) toggleFocus();
   });
 
   return (
@@ -88,38 +112,59 @@ export function HomeScreen() {
       <Logo />
 
       <Box marginTop={1} marginBottom={1}>
-        <Gradient colors={[...gradients.sunrise]}>
-          <Text>
-            {symbols.spark} {stats.openTodos} tasks waiting · {stats.overdue} overdue {symbols.dot}{' '}
-            let&apos;s ship something
-          </Text>
-        </Gradient>
+        <AnimatedGradient colors={flow.sunrise} speedMs={140}>
+          {`${symbols.spark} ${stats.open} tasks waiting · ${stats.overdue} overdue ${symbols.dot} let's ship something`}
+        </AnimatedGradient>
       </Box>
 
-      <Box
-        flexDirection="column"
-        borderStyle="round"
-        borderColor={colors.border}
-        paddingX={2}
-        paddingY={1}
-      >
+      <Box marginBottom={1}>
+        <StatTile value={stats.overdue} label="overdue" color={stats.overdue > 0 ? colors.danger : colors.dim} />
+        <StatTile value={stats.open} label="open" color={colors.accent} />
+        <StatTile value={stats.today} label="today" color={colors.success} />
+      </Box>
+
+      {recentPrompts.length > 0 ? (
+        <Box flexDirection="column" marginBottom={1}>
+          <Text color={colors.dim} bold>
+            Recent prompts
+          </Text>
+          <SelectList
+            items={recentPrompts}
+            getKey={(p) => `${p.project}-${p.slug}`}
+            accent={flow.ocean}
+            isActive={focus === 'recent'}
+            onSelect={(p) =>
+              router.navigate({ name: 'prompt-view', project: p.project, slug: p.slug })
+            }
+            renderItem={(prompt, selected) => (
+              <Box flexDirection="column">
+                <MenuText variant="label" selected={selected} bold>
+                  {prompt.title}
+                </MenuText>
+                <MenuText variant="description" selected={selected}>
+                  {`${prompt.project}/${prompt.slug}.md`}
+                </MenuText>
+              </Box>
+            )}
+          />
+        </Box>
+      ) : null}
+
+      <Box flexDirection="column" paddingX={0} paddingY={0}>
         <SelectList
           items={entries}
           getKey={(e) => e.id}
+          accent={flow.brand}
+          isActive={focus === 'main'}
           onSelect={(e) => e.go()}
           renderItem={(entry, selected) => (
-            <Box>
-              <Box width={3}>
-                <Gradient colors={[...entry.accent]}>
-                  <Text bold>{entry.icon}</Text>
-                </Gradient>
-              </Box>
-              <Box width={12}>
-                <Text bold color={selected ? colors.text : colors.muted}>
-                  {entry.label}
-                </Text>
-              </Box>
-              <Text color={colors.dim}>{entry.hint}</Text>
+            <Box flexDirection="column">
+              <MenuText variant="label" selected={selected} bold>
+                {entry.label}
+              </MenuText>
+              <MenuText variant="hint" selected={selected}>
+                {entry.hint}
+              </MenuText>
             </Box>
           )}
         />
@@ -129,6 +174,7 @@ export function HomeScreen() {
         hints={[
           { key: '↑↓', label: 'navigate' },
           { key: '⏎', label: 'open' },
+          ...(recentPrompts.length > 0 ? [{ key: '⇥', label: 'switch list' }] : []),
           { key: 'q', label: 'quit' },
         ]}
       />

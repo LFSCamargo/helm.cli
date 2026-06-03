@@ -33,6 +33,50 @@ function promptPath(project: string, slug: string): string {
   return join(projectDir(project), `${slug}.md`);
 }
 
+const PROJECT_META = 'helm.meta.json';
+
+interface ProjectMetaFile {
+  description?: string;
+}
+
+function readMetaDescription(project: string): string | null {
+  const path = join(projectDir(project), PROJECT_META);
+  if (!existsSync(path)) return null;
+  try {
+    const data = JSON.parse(readFileSync(path, 'utf8')) as ProjectMetaFile;
+    const text = data.description?.trim();
+    return text || null;
+  } catch {
+    return null;
+  }
+}
+
+function defaultProjectDescription(name: string, count: number): string {
+  if (count === 0) {
+    return 'Empty project — add prompts your agents can reuse.';
+  }
+  const label = name.replace(/-/g, ' ');
+  return `${count} reusable prompt${count === 1 ? '' : 's'} for ${label}`;
+}
+
+/** Custom description from prompts/<project>/helm.meta.json, if set. */
+export function getProjectCustomDescription(project: string): string | null {
+  return readMetaDescription(project);
+}
+
+/** Human-readable blurb for a prompt project (meta file or generated). */
+export function getProjectDescription(project: string, count?: number): string {
+  const custom = readMetaDescription(project);
+  if (custom) return custom;
+  const dir = projectDir(project);
+  if (!existsSync(dir)) {
+    return defaultProjectDescription(project, 0);
+  }
+  const n =
+    count ?? readdirSync(dir).filter((f) => f.endsWith('.md')).length;
+  return defaultProjectDescription(project, n);
+}
+
 /** Pull a display title from the first markdown H1, falling back to the slug. */
 function deriveTitle(content: string, slug: string): string {
   const heading = content.split('\n').find((line) => /^#\s+/.test(line.trim()));
@@ -50,7 +94,14 @@ export function listProjects(): PromptProject[] {
       const updatedAt = files.length
         ? new Date(Math.max(...files.map((f) => statSync(join(dir, f)).mtimeMs)))
         : statSync(dir).mtime;
-      return { name: entry.name, count: files.length, updatedAt };
+      const name = entry.name;
+      const count = files.length;
+      return {
+        name,
+        count,
+        updatedAt,
+        description: getProjectDescription(name, count),
+      };
     })
     .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
 }
@@ -60,6 +111,15 @@ export function createProject(name: string): string {
   const dir = projectDir(slug);
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
   return slug;
+}
+
+/** Recently touched prompts across all projects (by file mtime). */
+export function listRecentPrompts(limit = 5): PromptMeta[] {
+  const all: PromptMeta[] = [];
+  for (const project of listProjects()) {
+    all.push(...listPrompts(project.name));
+  }
+  return all.sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime()).slice(0, limit);
 }
 
 export function listPrompts(project: string): PromptMeta[] {

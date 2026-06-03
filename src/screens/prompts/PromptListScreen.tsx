@@ -1,16 +1,18 @@
 import { useMemo, useState } from 'react';
-import { Box, Text, useInput } from 'ink';
+import { Box, useInput } from 'ink';
 import { Layout } from '../../components/Layout.js';
 import { SelectList } from '../../components/SelectList.js';
 import { useRouter } from '../../navigation/RouterContext.js';
 import { useToast } from '../../hooks/useToast.js';
 import {
   deletePrompt,
+  getProjectDescription,
   listPrompts,
   readPrompt,
 } from '../../core/prompts/prompt.service.js';
 import { copyToClipboard } from '../../services/clipboard.js';
-import { colors, gradients, symbols } from '../../theme/theme.js';
+import { flow, gradients, symbols } from '../../theme/theme.js';
+import { MenuText } from '../../components/MenuText.js';
 import { formatRelative } from '../../core/util/datetime.js';
 
 export function PromptListScreen({ project }: { project: string }) {
@@ -33,9 +35,11 @@ export function PromptListScreen({ project }: { project: string }) {
   return (
     <Layout
       breadcrumb={['Prompts', project]}
-      title={`${project}`}
-      subtitle="Reusable prompts in this project."
+      title={project}
+      subtitle={getProjectDescription(project, prompts.length)}
       accent={gradients.ocean}
+      bodyBorder={false}
+      contentPaddingX={0}
       message={toast}
       hints={[
         { key: '↑↓', label: 'navigate' },
@@ -50,6 +54,7 @@ export function PromptListScreen({ project }: { project: string }) {
       <SelectList
         items={prompts}
         getKey={(p) => p.slug}
+        accent={flow.ocean}
         emptyText="No prompts yet. Press n to create one."
         onSelect={(p) => router.navigate({ name: 'prompt-view', project, slug: p.slug })}
         actions={{
@@ -62,18 +67,22 @@ export function PromptListScreen({ project }: { project: string }) {
           },
         }}
         renderItem={(prompt, selected) => (
-          <Box>
-            <Box width={3}>
-              <Text color={colors.accentAlt}>{selected ? symbols.spark : symbols.dot}</Text>
-            </Box>
-            <Box width={32}>
-              <Text bold color={selected ? colors.text : colors.muted}>
+          <Box flexDirection="column">
+            <Box>
+              <Box width={3}>
+                <MenuText variant="icon" selected={selected} bold>
+                  {selected ? symbols.spark : symbols.dot}
+                </MenuText>
+              </Box>
+              <MenuText variant="label" selected={selected} bold>
                 {prompt.title}
-              </Text>
+              </MenuText>
             </Box>
-            <Text color={colors.dim}>
-              {prompt.slug}.md {symbols.dot} {formatRelative(prompt.updatedAt)}
-            </Text>
+            <Box marginLeft={3}>
+              <MenuText variant="description" selected={selected}>
+                {`${prompt.slug}.md ${symbols.separator} ${formatRelative(prompt.updatedAt)}`}
+              </MenuText>
+            </Box>
           </Box>
         )}
       />

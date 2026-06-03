@@ -8,7 +8,9 @@ export type Route =
   | { name: 'prompt-create'; project: string }
   | { name: 'project-create' }
   | { name: 'todos' }
-  | { name: 'todo-create' }
+  | { name: 'todo-list'; view: 'today' }
+  | { name: 'todo-list'; view: 'project'; project: string }
+  | { name: 'todo-create'; project?: string }
   | { name: 'todo-edit'; id: string };
 
 export type RouteName = Route['name'];

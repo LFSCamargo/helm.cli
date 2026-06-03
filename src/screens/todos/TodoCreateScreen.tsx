@@ -7,16 +7,18 @@ import { createTodo } from '../../core/todos/todo.service.js';
 import { parseDueDate, parseReminder } from '../../core/util/datetime.js';
 import { gradients } from '../../theme/theme.js';
 
-const EMPTY: TodoFormValues = {
-  title: '',
-  notes: '',
-  project: '',
-  priority: 4,
-  due: '',
-  reminder: '',
-};
+function emptyValues(project = ''): TodoFormValues {
+  return {
+    title: '',
+    notes: '',
+    project,
+    priority: 4,
+    due: '',
+    reminder: '',
+  };
+}
 
-export function TodoCreateScreen() {
+export function TodoCreateScreen({ defaultProject }: { defaultProject?: string }) {
   const router = useRouter();
   const { toast, show } = useToast();
 
@@ -50,7 +52,11 @@ export function TodoCreateScreen() {
         { key: 'esc', label: 'cancel' },
       ]}
     >
-      <TodoForm initial={EMPTY} onSubmit={handleSubmit} onError={(m) => show(m, 'danger')} />
+      <TodoForm
+        initial={emptyValues(defaultProject ?? '')}
+        onSubmit={handleSubmit}
+        onError={(m) => show(m, 'danger')}
+      />
     </Layout>
   );
 }

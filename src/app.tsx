@@ -7,6 +7,7 @@ import { PromptListScreen } from './screens/prompts/PromptListScreen.js';
 import { PromptViewScreen } from './screens/prompts/PromptViewScreen.js';
 import { PromptCreateScreen } from './screens/prompts/PromptCreateScreen.js';
 import { PromptEditScreen } from './screens/prompts/PromptEditScreen.js';
+import { TodoHubScreen } from './screens/todos/TodoHubScreen.js';
 import { TodoListScreen } from './screens/todos/TodoListScreen.js';
 import { TodoCreateScreen } from './screens/todos/TodoCreateScreen.js';
 import { TodoEditScreen } from './screens/todos/TodoEditScreen.js';
@@ -42,9 +43,16 @@ function ScreenRouter() {
         />
       );
     case 'todos':
-      return <TodoListScreen key="todos" />;
+      return <TodoHubScreen key="todos" />;
+    case 'todo-list':
+      return <TodoListScreen key={`tl-${route.view}-${'project' in route ? route.project : ''}`} route={route} />;
     case 'todo-create':
-      return <TodoCreateScreen key="todo-create" />;
+      return (
+        <TodoCreateScreen
+          key={`tc-${route.project ?? ''}`}
+          defaultProject={route.project}
+        />
+      );
     case 'todo-edit':
       return <TodoEditScreen key={`te-${route.id}`} id={route.id} />;
     default:

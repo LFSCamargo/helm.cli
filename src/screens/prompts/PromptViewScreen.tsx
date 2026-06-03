@@ -30,6 +30,7 @@ export function PromptViewScreen({ project, slug }: { project: string; slug: str
     <Layout
       breadcrumb={['Prompts', project, `${slug}.md`]}
       title={slug}
+      subtitle="Markdown preview — copy or edit to use with your agent."
       accent={gradients.ocean}
       message={toast}
       hints={[

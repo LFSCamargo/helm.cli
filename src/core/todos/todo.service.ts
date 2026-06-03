@@ -23,6 +23,21 @@ function fromRow(row: TodoTable): Todo {
   };
 }
 
+/** Distinct non-empty project names from todos, sorted alphabetically. */
+export async function listTodoProjects(): Promise<string[]> {
+  const rows = await db
+    .selectFrom('todos')
+    .select('project')
+    .where('project', 'is not', null)
+    .execute();
+  const names = new Set<string>();
+  for (const row of rows) {
+    const name = row.project?.trim();
+    if (name) names.add(name);
+  }
+  return [...names].sort((a, b) => a.localeCompare(b));
+}
+
 export async function listTodos(): Promise<Todo[]> {
   const rows = await db
     .selectFrom('todos')

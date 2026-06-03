@@ -1,6 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Text, useInput } from 'ink';
-import { colors, symbols } from '../theme/theme.js';
+import { SelectListRow } from './SelectListRow.js';
+import { menuColors } from '../theme/menuColors.js';
+import { colors, flow, symbols } from '../theme/theme.js';
+import { AnimatedGradient } from './AnimatedGradient.js';
+
+function ListPointer({ active }: { active: boolean }) {
+  const c = menuColors(active);
+  if (active) {
+    return (
+      <AnimatedGradient colors={flow.brand} speedMs={110} bold>
+        {symbols.pointer}
+      </AnimatedGradient>
+    );
+  }
+  return <Text color={c.pointer}> </Text>;
+}
 
 interface SelectListProps<T> {
   items: T[];
@@ -12,12 +27,13 @@ interface SelectListProps<T> {
   actions?: Record<string, (item: T) => void>;
   isActive?: boolean;
   emptyText?: string;
+  /** @deprecated Accent bar replaced by purple selection row; kept for API compat. */
+  accent?: readonly string[];
 }
 
 /**
- * Reusable vertical picker with arrow / vim navigation, an animated pointer,
- * and per-item action shortcuts. Owns its highlight index but clamps it when
- * the underlying list changes (e.g. after a delete).
+ * Reusable vertical picker with arrow / vim navigation, purple animated
+ * selection background, and per-item action shortcuts.
  */
 export function SelectList<T>({
   items,
@@ -57,9 +73,9 @@ export function SelectList<T>({
 
   if (items.length === 0) {
     return (
-      <Box paddingY={1}>
+      <Box paddingY={0} paddingLeft={1}>
         <Text color={colors.dim} italic>
-          {emptyText}
+          {symbols.spark} {emptyText}
         </Text>
       </Box>
     );
@@ -70,14 +86,14 @@ export function SelectList<T>({
       {items.map((item, i) => {
         const selected = i === index && isActive;
         return (
-          <Box key={getKey(item)}>
-            <Box width={2}>
-              <Text color={colors.accent} bold>
-                {selected ? symbols.pointer : ' '}
-              </Text>
+          <SelectListRow key={getKey(item)} selected={selected}>
+            <Box flexDirection="row">
+              <Box width={2}>
+                <ListPointer active={selected} />
+              </Box>
+              <Box flexGrow={1}>{renderItem(item, selected)}</Box>
             </Box>
-            {renderItem(item, selected)}
-          </Box>
+          </SelectListRow>
         );
       })}
     </Box>
