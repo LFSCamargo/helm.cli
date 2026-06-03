@@ -27,4 +27,5 @@ This is an ESM-only React + Ink terminal app. When editing `src/`:
   hardcode these locations. Never commit the `prompts/` or `data/` folders.
 - **SQLite storage:** dates as ISO-8601 strings, booleans as `0/1` integers.
   Schema changes go in `src/core/db/schema.ts` + `src/core/db/migrate.ts`.
-- Run `npm run typecheck` after changes; the build must stay clean.
+- Run `pnpm types:check` after changes; the build must stay clean.
+- Follow `quality-gates.mdc`: update tests in `__tests__/`, keep `/docs` in sync, pass format/lint/types/tests.

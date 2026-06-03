@@ -4,12 +4,7 @@ import { Layout } from '../../components/Layout.js';
 import { PriorityTodoList } from '../../components/PriorityTodoList.js';
 import { useRouter } from '../../navigation/RouterContext.js';
 import { useToast } from '../../hooks/useToast.js';
-import {
-  cyclePriority,
-  deleteTodo,
-  listTodos,
-  toggleTodo,
-} from '../../core/todos/todo.service.js';
+import { cyclePriority, deleteTodo, listTodos, toggleTodo } from '../../core/todos/todo.service.js';
 import { getProjectCustomDescription } from '../../core/prompts/prompt.service.js';
 import type { Route } from '../../navigation/routes.js';
 import { colors, flow, gradients } from '../../theme/theme.js';
@@ -32,8 +27,7 @@ function listSubtitle(route: TodoListRoute, open: number, done: number): string 
     return `${open} due today across all projects`;
   }
   const custom = getProjectCustomDescription(route.project);
-  const desc =
-    custom ?? `Tasks in #${route.project} · ${open} open · ${done} done`;
+  const desc = custom ?? `Tasks in #${route.project} · ${open} open · ${done} done`;
   return custom ? `${desc} · ${open} open · ${done} done` : desc;
 }
 
@@ -59,8 +53,7 @@ export function TodoListScreen({ route }: { route: TodoListRoute }) {
     else if (input === 'n') router.navigate({ name: 'todo-create', project: createProject });
   });
 
-  const breadcrumb =
-    route.view === 'today' ? ['Todos', 'Today'] : ['Todos', route.project];
+  const breadcrumb = route.view === 'today' ? ['Todos', 'Today'] : ['Todos', route.project];
 
   const title = route.view === 'today' ? 'Today' : route.project;
 

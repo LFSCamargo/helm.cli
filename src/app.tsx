@@ -45,14 +45,14 @@ function ScreenRouter() {
     case 'todos':
       return <TodoHubScreen key="todos" />;
     case 'todo-list':
-      return <TodoListScreen key={`tl-${route.view}-${'project' in route ? route.project : ''}`} route={route} />;
-    case 'todo-create':
       return (
-        <TodoCreateScreen
-          key={`tc-${route.project ?? ''}`}
-          defaultProject={route.project}
+        <TodoListScreen
+          key={`tl-${route.view}-${'project' in route ? route.project : ''}`}
+          route={route}
         />
       );
+    case 'todo-create':
+      return <TodoCreateScreen key={`tc-${route.project ?? ''}`} defaultProject={route.project} />;
     case 'todo-edit':
       return <TodoEditScreen key={`te-${route.id}`} id={route.id} />;
     default:

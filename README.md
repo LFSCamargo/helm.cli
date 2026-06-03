@@ -94,10 +94,20 @@ HELM_PROMPTS_DIR=~/notes/prompts HELM_DATA_DIR=~/.local/share/helm helm
 Both `prompts/` and `data/` are listed in `.gitignore`, so your prompts and
 tasks never get committed.
 
+## Quality gates
+
+```bash
+pnpm quality          # format + lint + types + unit + integration
+pnpm test:coverage    # same tests with 80% coverage on core/config/theme
+```
+
+CI runs `format:check`, `lint:check`, `types:check`, `unitary:test`, `integration:test`,
+and `test:coverage` on every pull request. See [`docs/quality-gates.md`](./docs/quality-gates.md).
+
 ## Project structure
 
-See [`AGENTS.md`](./AGENTS.md) for the full architecture and contribution
-conventions. In short:
+See [`AGENTS.md`](./AGENTS.md) and [`docs/`](./docs/) for architecture, features, and
+contribution conventions. In short:
 
 ```
 src/

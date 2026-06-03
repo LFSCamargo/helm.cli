@@ -26,15 +26,7 @@ interface TaskStats {
   overdue: number;
 }
 
-function StatTile({
-  value,
-  label,
-  color,
-}: {
-  value: number;
-  label: string;
-  color: string;
-}) {
+function StatTile({ value, label, color }: { value: number; label: string; color: string }) {
   return (
     <Box
       flexDirection="column"
@@ -118,7 +110,11 @@ export function HomeScreen() {
       </Box>
 
       <Box marginBottom={1}>
-        <StatTile value={stats.overdue} label="overdue" color={stats.overdue > 0 ? colors.danger : colors.dim} />
+        <StatTile
+          value={stats.overdue}
+          label="overdue"
+          color={stats.overdue > 0 ? colors.danger : colors.dim}
+        />
         <StatTile value={stats.open} label="open" color={colors.accent} />
         <StatTile value={stats.today} label="today" color={colors.success} />
       </Box>

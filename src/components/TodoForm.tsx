@@ -113,9 +113,7 @@ export function TodoForm({ initial, onSubmit, onError }: TodoFormProps) {
       })}
 
       <Box marginTop={0} flexDirection="column">
-        {dueDate ? (
-          <Text color={colors.info}>↳ due {formatAbsolute(dueDate)}</Text>
-        ) : null}
+        {dueDate ? <Text color={colors.info}>↳ due {formatAbsolute(dueDate)}</Text> : null}
         {remindDate ? (
           <Text color={colors.warning}>↳ reminder {formatAbsolute(remindDate)}</Text>
         ) : null}

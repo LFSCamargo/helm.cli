@@ -40,9 +40,7 @@ export function StatusBar({ hints, message }: StatusBarProps) {
       <Box>
         {hints.map((hint, i) => (
           <Box key={hint.key}>
-            {i > 0 ? (
-              <Text color={colors.border}> {symbols.separator} </Text>
-            ) : null}
+            {i > 0 ? <Text color={colors.border}> {symbols.separator} </Text> : null}
             <Text color={colors.accent} bold>
               {hint.key}
             </Text>

@@ -21,7 +21,23 @@ pnpm dev         # run from source with tsx
 pnpm build       # compile to dist/ (alias: pnpm nx build helm-cli)
 pnpm start       # run the compiled build
 pnpm typecheck   # alias: pnpm nx typecheck helm-cli
+pnpm quality     # format + lint + types + unit + integration tests
 ```
+
+## Quality gates (required)
+
+Every change must pass **format**, **lint**, **types**, and **tests** before merge.
+
+| Check | Command |
+| --- | --- |
+| Format | `pnpm format:check` |
+| Lint | `pnpm lint:check` |
+| Types | `pnpm types:check` |
+| Unit tests | `pnpm unitary:test` (`*.unit.test.ts` in `__tests__/`) |
+| Integration tests | `pnpm integration:test` (`*.integration.test.ts`) |
+| Coverage (80%) | `pnpm test:coverage` |
+
+When you change implementation, **update tests and `/docs` in the same PR**. See `docs/quality-gates.md` and `.cursor/rules/quality-gates.mdc`.
 
 Do not use `npm` or `yarn`, and never commit `package-lock.json` / `yarn.lock`.
 The bin is `helm` (after `pnpm build`, points to `dist/cli.js`).

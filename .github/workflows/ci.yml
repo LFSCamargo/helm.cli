@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: format:check
+        run: pnpm format:check
+
+      - name: lint:check
+        run: pnpm lint:check
+
+      - name: types:check
+        run: pnpm types:check
+
+      - name: unitary:test
+        run: pnpm unitary:test
+
+      - name: integration:test
+        run: pnpm integration:test
+
+      - name: test:coverage
+        run: pnpm test:coverage

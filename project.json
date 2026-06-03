@@ -1,0 +1,55 @@
+{
+  "name": "helm-cli",
+  "$schema": "./node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:helm-cli"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": { "script": "build" },
+      "outputs": ["{projectRoot}/dist"],
+      "cache": true
+    },
+    "typecheck": {
+      "executor": "nx:run-script",
+      "options": { "script": "typecheck" },
+      "cache": true
+    },
+    "types:check": {
+      "executor": "nx:run-script",
+      "options": { "script": "types:check" },
+      "cache": true
+    },
+    "lint:check": {
+      "executor": "nx:run-script",
+      "options": { "script": "lint:check" },
+      "cache": true
+    },
+    "format:check": {
+      "executor": "nx:run-script",
+      "options": { "script": "format:check" },
+      "cache": true
+    },
+    "unitary:test": {
+      "executor": "nx:run-script",
+      "options": { "script": "unitary:test" },
+      "cache": true
+    },
+    "integration:test": {
+      "executor": "nx:run-script",
+      "options": { "script": "integration:test" },
+      "cache": true
+    },
+    "test:coverage": {
+      "executor": "nx:run-script",
+      "options": { "script": "test:coverage" },
+      "cache": true
+    },
+    "quality": {
+      "executor": "nx:run-script",
+      "options": { "script": "quality" },
+      "cache": false
+    }
+  }
+}

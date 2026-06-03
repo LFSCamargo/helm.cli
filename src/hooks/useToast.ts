@@ -20,9 +20,12 @@ export function useToast(timeoutMs = 2200) {
     [timeoutMs],
   );
 
-  useEffect(() => () => {
-    if (timer.current) clearTimeout(timer.current);
-  }, []);
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
 
   return { toast, show };
 }

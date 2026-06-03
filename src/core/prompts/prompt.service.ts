@@ -72,8 +72,7 @@ export function getProjectDescription(project: string, count?: number): string {
   if (!existsSync(dir)) {
     return defaultProjectDescription(project, 0);
   }
-  const n =
-    count ?? readdirSync(dir).filter((f) => f.endsWith('.md')).length;
+  const n = count ?? readdirSync(dir).filter((f) => f.endsWith('.md')).length;
   return defaultProjectDescription(project, n);
 }
 

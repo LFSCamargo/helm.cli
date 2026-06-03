@@ -5,20 +5,45 @@
     "production": [
       "default",
       "!{projectRoot}/**/*.{spec,test}.{ts,tsx}",
-      "!{projectRoot}/tsconfig.json"
+      "!{projectRoot}/**/__tests__/**",
+      "!{projectRoot}/coverage/**"
     ],
-    "sharedGlobals": ["{workspaceRoot}/tsconfig.json"]
+    "sharedGlobals": ["{workspaceRoot}/tsconfig.json", "{workspaceRoot}/vitest.config.ts"]
   },
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"],
       "outputs": ["{projectRoot}/dist"],
-      "cache": true
+      "cache": false
     },
     "typecheck": {
       "inputs": ["default", "^production"],
-      "cache": true
+      "cache": false
+    },
+    "types:check": {
+      "inputs": ["default", "^production"],
+      "cache": false
+    },
+    "lint:check": {
+      "inputs": ["default", "{workspaceRoot}/eslint.config.js"],
+      "cache": false
+    },
+    "format:check": {
+      "inputs": ["default", "{workspaceRoot}/.prettierrc"],
+      "cache": false
+    },
+    "test:unit": {
+      "inputs": ["default", "^production"],
+      "cache": false
+    },
+    "test:integration": {
+      "inputs": ["default", "^production"],
+      "cache": false
+    },
+    "test:coverage": {
+      "inputs": ["default", "^production"],
+      "cache": false
     }
   }
 }

@@ -35,10 +35,7 @@ export function isTitleRedundant(title: string, breadcrumb: string[]): boolean {
   const t = title.trim();
   const lower = t.toLowerCase();
   return (
-    t === last ||
-    lower === last.toLowerCase() ||
-    t === lastBase ||
-    lower === lastBase.toLowerCase()
+    t === last || lower === last.toLowerCase() || t === lastBase || lower === lastBase.toLowerCase()
   );
 }
 

@@ -1,0 +1,52 @@
+---
+description: Quality gates — tests, docs, lint, format, and typecheck must pass
+alwaysApply: true
+---
+
+# Quality gates (required on every change)
+
+Before finishing any implementation in this repo, you **must** satisfy all of the following.
+
+## 1. Tests
+
+- Place tests in `__tests__/` next to the code under test.
+- **Unit tests:** `*.unit.test.ts` — pure logic, no live DB/network.
+- **Integration tests:** `*.integration.test.ts` — SQLite, filesystem, or multi-module flows.
+- When you **add, change, or remove** behavior, **add, update, or remove** the matching tests in the same change.
+- Coverage threshold is **80%** on gated paths (`src/core`, `src/config`, `src/theme`). Run `pnpm test:coverage` locally.
+
+```bash
+pnpm test:unit
+pnpm test:integration
+```
+
+## 2. Documentation
+
+- Keep `/docs` accurate when features, architecture, or public behavior change.
+- Update the relevant file under `docs/features/`, `docs/components/`, or `docs/architecture.md`.
+- If you add a screen or core service, document it in the matching doc page.
+
+## 3. Static checks (all must pass)
+
+```bash
+pnpm format:check   # Prettier
+pnpm lint:check     # ESLint
+pnpm types:check    # TypeScript
+```
+
+Or run the full gate:
+
+```bash
+pnpm quality
+# or: pnpm nx run helm-cli:quality
+```
+
+## 4. Do not skip gates
+
+- Do not commit with failing lint, format, typecheck, or tests.
+- Do not disable coverage thresholds or ESLint rules to “make CI green” without explicit user approval.
+- UI-only work still requires passing static checks; add tests when logic in `core/` or shared components changes.
+
+## 5. Helm conventions still apply
+
+Follow `helm-conventions.mdc` (ESM `.js` imports, no `import React`, tokens from `theme/theme.ts`, paths via `config/paths.ts`).

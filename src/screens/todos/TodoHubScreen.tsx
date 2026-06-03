@@ -41,8 +41,7 @@ export function TodoHubScreen() {
           return {
             id: `project-${project}`,
             label: project,
-            description:
-              custom ?? `Tasks tagged #${project} — ${count} open right now.`,
+            description: custom ?? `Tasks tagged #${project} — ${count} open right now.`,
             meta: `${count} open`,
             go: () => router.navigate({ name: 'todo-list', view: 'project', project }),
           };
@@ -50,7 +49,7 @@ export function TodoHubScreen() {
       ];
       setEntries(menu);
     });
-  }, []);
+  }, [router]);
 
   useInput((input, key) => {
     if (key.escape) router.back();

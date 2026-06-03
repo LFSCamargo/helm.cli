@@ -18,7 +18,16 @@ export const gradients = {
  * Seamless palettes for the animation layer (rotate one stop per frame).
  */
 export const flow = {
-  brand: ['#6ee7b7', '#2dd4bf', '#22d3ee', '#6366f1', '#818cf8', '#6366f1', '#22d3ee', '#2dd4bf'] as const,
+  brand: [
+    '#6ee7b7',
+    '#2dd4bf',
+    '#22d3ee',
+    '#6366f1',
+    '#818cf8',
+    '#6366f1',
+    '#22d3ee',
+    '#2dd4bf',
+  ] as const,
   ocean: ['#a78bfa', '#c084fc', '#f472b6', '#c084fc'] as const,
   flame: ['#fbbf24', '#fb923c', '#f97316', '#ef4444', '#f97316', '#fb923c'] as const,
   sunrise: ['#fde68a', '#fb923c', '#f472b6', '#fb923c'] as const,

@@ -19,12 +19,16 @@ export function PromptListScreen({ project }: { project: string }) {
   const router = useRouter();
   const { toast, show } = useToast();
   const [tick, setTick] = useState(0);
-  const prompts = useMemo(() => listPrompts(project), [project, tick]);
+  // tick forces refresh after mutations without remounting the screen
+  const prompts = useMemo(() => listPrompts(project), [project, tick]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const copyPrompt = async (slug: string) => {
     const content = readPrompt(project, slug);
     const ok = await copyToClipboard(content);
-    show(ok ? 'Copied to clipboard — paste it to your agent!' : 'Clipboard unavailable', ok ? 'success' : 'danger');
+    show(
+      ok ? 'Copied to clipboard — paste it to your agent!' : 'Clipboard unavailable',
+      ok ? 'success' : 'danger',
+    );
   };
 
   useInput((input, key) => {

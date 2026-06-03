@@ -99,7 +99,20 @@ export function formatInput(date: Date): string {
 
 /** Compact absolute label, e.g. "Jun 10, 09:00". */
 export function formatAbsolute(date: Date): string {
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
   const time = `${pad(date.getHours())}:${pad(date.getMinutes())}`;
   const sameYear = date.getFullYear() === new Date().getFullYear();
   const base = `${months[date.getMonth()]} ${date.getDate()}`;
