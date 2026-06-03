@@ -54,9 +54,17 @@ Build a runnable binary:
 ```bash
 pnpm build         # or: pnpm nx build helm-cli
 pnpm start         # runs dist/cli.js
-# or, after `pnpm link --global`, just:
+```
+
+**Local PATH shim** (git-ignored `bin/helm` wrapper):
+
+```bash
+pnpm path:bin
+export PATH="/absolute/path/to/helm.cli/bin:$PATH"   # add to ~/.zshrc
 helm
 ```
+
+Or use `pnpm link --global` after build to install `helm` via pnpm.
 
 Nx caches `build` and `typecheck`:
 

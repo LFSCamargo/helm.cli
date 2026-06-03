@@ -41,7 +41,8 @@ Every change must pass **format**, **lint**, **types**, and **tests** before mer
 When you change implementation, **update tests and `/docs` in the same PR**. See `docs/quality-gates.md` and `.cursor/rules/quality-gates.mdc`.
 
 Do not use `npm` or `yarn`, and never commit `package-lock.json` / `yarn.lock`.
-The bin is `helm` (after `pnpm build`, points to `dist/cli.js`).
+The bin is `helm` (after `pnpm build`, points to `dist/cli.js`). For a local PATH
+wrapper without global link: `pnpm path:bin` then add repo `bin/` to `PATH`.
 
 ## Where data lives (git-ignored)
 

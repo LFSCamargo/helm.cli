@@ -5,6 +5,9 @@ node_modules/
 dist/
 coverage/
 
+# Local PATH wrapper (pnpm path:bin)
+/bin/
+
 # Nx
 .nx/cache
 .nx/workspace-data

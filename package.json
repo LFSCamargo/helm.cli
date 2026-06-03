@@ -17,6 +17,7 @@
     "preinstall": "npx only-allow pnpm",
     "dev": "tsx src/cli.tsx",
     "build": "tsc",
+    "path:bin": "node scripts/generate-path-bin.mjs",
     "start": "node dist/cli.js",
     "typecheck": "tsc --noEmit",
     "types:check": "tsc --noEmit",
