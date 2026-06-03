@@ -1,0 +1,30 @@
+---
+description: Core conventions for the Helm Ink/TypeScript CLI
+globs: src/**/*.{ts,tsx}
+alwaysApply: true
+---
+
+# Helm CLI conventions
+
+This is an ESM-only React + Ink terminal app. When editing `src/`:
+
+- **Always use explicit `.js` extensions in relative imports** (e.g.
+  `import { db } from '../db/client.js'`), even for `.ts`/`.tsx` files. This is
+  required by the `Bundler` module resolution + ESM output.
+- **Never add `import React from 'react'`.** The automatic JSX runtime is on and
+  `noUnusedLocals` will fail the build. Import only hooks you actually use
+  (`import { useState } from 'react'`). Use the `React.` namespace only in files
+  that already import it for types.
+- **Keep `src/core/**` free of React/Ink.** Domain logic (db, prompts, todos,
+  util) must stay UI-agnostic so it is testable in isolation.
+- **Use design tokens from `src/theme/theme.ts`** (colors, gradients, symbols,
+  priorityMeta). Do not hardcode hex colors inside components/screens.
+- **Add new screens** under `src/screens/<feature>/`, register them in
+  `src/app.tsx`, and add the route to the union in
+  `src/navigation/routes.ts`.
+- **Data layout is git-ignored:** prompts as `prompts/<project>/<slug>.md`,
+  SQLite at `data/helm.db`. Resolve paths via `src/config/paths.ts` only — never
+  hardcode these locations. Never commit the `prompts/` or `data/` folders.
+- **SQLite storage:** dates as ISO-8601 strings, booleans as `0/1` integers.
+  Schema changes go in `src/core/db/schema.ts` + `src/core/db/migrate.ts`.
+- Run `npm run typecheck` after changes; the build must stay clean.
